@@ -22,7 +22,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: zero-code-monitoring
+  name: zero-code-app
   namespace: argocd
 spec:
   project: default
