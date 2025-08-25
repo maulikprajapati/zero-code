@@ -104,6 +104,10 @@ spec:
               max_concurrent: 2
             query_scheduler:
               max_outstanding_requests_per_tenant: 1000
+            ruler:
+              ring:
+                kvstore:
+                  store: memberlist
 
             query_range:
               align_queries_with_step: true
