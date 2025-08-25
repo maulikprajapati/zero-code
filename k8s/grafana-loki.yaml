@@ -30,7 +30,7 @@ spec:
         - name: "queryScheduler.enabled"
           value: "false"
         - name: "queryFrontend.enabled"
-          value: "false"
+          value: "true"
         - name: "serviceMonitor.enabled"
           value: "false"
       values: |
@@ -87,6 +87,10 @@ spec:
             memberlist:
               join_members:
               - loki-distributed-memberlist
+            frontend:
+              compress_responses: true
+              log_queries_longer_than: 5s
+              tail_proxy_url: http://loki-distributed-querier:3100
             querier:
               max_concurrent: 2
 
