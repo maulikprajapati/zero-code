@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dm-configmap
+  namespace: applications
+  labels:
+    app: dm-configmap
+data:
+  appsettings.json: |
+    {
+      "RoutePrefix": "user-management",
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "System": "Information",
+          "Microsoft": "Warning",
+          "Microsoft.Hosting.Lifetime": "Information",
+          "System.Net.Http.HttpClient": "Warning"
+        },
+        "NLog": {
+          "throwConfigExceptions": true,
+          "targets": {
+            "logconsole": {
+              "type": "ColoredConsole",
+              "layout": "{\"timestamp\":\"${longdate}\",\"level\":\"${level:uppercase=true}\",\"logger\":\"${logger}\",\"traceId\":\"${mdlc:item=TraceId}\",\"spanId\":\"${mdlc:item=SpanId}\",\"message\":\"${message}\",\"exception\":\"${exception:format=tostring}\"}",
+              "rowHighlightingRules": [
+                {
+                  "condition": "level == LogLevel.Info",
+                  "foregroundColor": "White"
+                },
+                {
+                  "condition": "level == LogLevel.Debug",
+                  "foregroundColor": "Gray"
+                },
+                {
+                  "condition": "level == LogLevel.Warn",
+                  "foregroundColor": "Yellow"
+                },
+                {
+                  "condition": "level == LogLevel.Error",
+                  "foregroundColor": "Red"
+                }
+              ]
+            }
+          },
+          "rules": {
+            "0": {
+              "logger": "Microsoft.Hosting.Lifetime",
+              "minLevel": "Info",
+              "writeTo": "logconsole",
+              "final": true
+            },
+            "1": {
+              "logger": "Microsoft.*",
+              "minLevel": "Warn",
+              "writeTo": "logconsole",
+              "final": true
+            },
+            "2": {
+              "logger": "*",
+              "minLevel": "Info",
+              "writeTo": "logconsole"
+            }
+          }
+        }
+      },
+      "AllowedHosts": "*",
+      "ConnectionStrings": {
+        "WGIAppsDB": "User ID=postgres;Password=HLgLn2OJwc8l3yr6lN45eorD;Host=stealthcam-dev-stealthcam-db-cluster.cluster-cy3bbjzaislx.us-east-1.rds.amazonaws.com;Port=5432;Database=scdev;Maximum Pool Size=12;Application Name=UserManager",
+        "WGIAppsRoDB": "User ID=postgres;Password=HLgLn2OJwc8l3yr6lN45eorD;Host=stealthcam-dev-stealthcam-db-cluster.cluster-ro-cy3bbjzaislx.us-east-1.rds.amazonaws.com;Port=5432;Database=scdev;Maximum Pool Size=27;CommandTimeout=60;Application Name=UserManager",
+        "WGIHistoricalDB": "User ID=scdevuser;Password=56Ls27dR13JHsYaW0sDPVvOX;Host=stealthcam-dev-historical-db-cluster.cluster-cy3bbjzaislx.us-east-1.rds.amazonaws.com;Port=5432;Database=reportingsc-dev;Maximum Pool Size=12"
+      },
+      "ThreadPool": {
+        "MinWorkerThreadsPerCPU": 1,
+        "MinIOCPThreadsPerCPU": 1
+      },
+      "DBContextPoolSize": 48,
+      "AvatarBucket": {
+        "BucketName": "dev.env.sc.user-avatars",
+        "Region": "us-east-1"
+      },
+      "TempBucket": {
+        "BucketName": "dev.env.sc.temp",
+        "Region": "us-east-1"
+      },
+      "ValidExtensions": [
+        ".jpg",
+        ".jpeg",
+        ".png"
+      ],
+      "ServiceEndpoints": {
+        "PaymentMS": "http://payment-gateway-dev",
+        "SubscriptionMS": "http://subscription-manager-dev",
+        "DeviceManagerMS": "http://devicemanager:9902",
+        "FileManagerMS": "http://file-manager-dev",
+        "IntermediateRepresentationMS": "http://intermediate-representation-dev",
+        "NotificationMS": "http://notification-service-dev",
+        "SecurityGatewayMS": "http://securitygateway:9900",
+        "MarkerMS": "http://marker-service-dev"
+      },
+      "HeatMapEnabled": true,
+      "MarkersEnabled": false,
+      "FeedbackCacheTimeMinutes": 720,
+      "Redis": {
+        "AllowAdmin": true,
+        "Ssl": true,
+        "ConnectTimeout": 1500,
+        "ConnectRetry": 3,
+        "Hosts": [
+          {
+            "Host": "master.stealthcam-dev-user-manager.zxoecb.use1.cache.amazonaws.com",
+            "Port": "6379"
+          },
+          {
+            "Host": "replica.stealthcam-dev-user-manager.zxoecb.use1.cache.amazonaws.com",
+            "Port": "6379"
+          }
+        ],
+        "Password": "FOzDTQpbi2a0JUaou6cLx84s",
+        "AbortOnConnectFail": false
+      },
+      "SendBillingReceiptEnabled": false,
+      "Region": "us-east-1",
+      "ProducerOptions": {
+        "Region": "us-east-1",
+        "QueueTag": "dev",
+        "QueueOptions": [
+          {
+            "QueueName": "klaviyo-queue",
+            "ShouldCreateDeadLetterQueue": true,
+            "MaxReceiveCount": 10
+          }
+        ]
+      }
+    }
+  

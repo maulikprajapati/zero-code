@@ -1,0 +1,81 @@
+server:
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+  
+  # Drop health check spans at ingestion
+  span_filters:
+    # Filter by span name (what .NET auto instrumentation typically creates)
+    - match:
+        span_name:
+          regex: ".*(GET|POST) /health.*"
+        action: drop
+    - match:
+        span_name:
+          regex: ".*(GET|POST) /api/security-gateway/health.*"
+        action: drop
+    - match:
+        span_name:
+          regex: ".*(GET|POST) /api/user-management/health.*"
+        action: drop
+    
+    # Filter by HTTP attributes
+    - match:
+        attributes:
+          - key: "http.route"
+            value: "/health"
+        action: drop
+    - match:
+        attributes:
+          - key: "http.route"
+            value: "/api/security-gateway/health"
+        action: drop
+    - match:
+        attributes:
+          - key: "http.route"
+            value: "/api/user-management/health"
+        action: drop
+    - match:
+        attributes:
+          - key: "http.target"
+            value: "/health"
+        action: drop
+    - match:
+        attributes:
+          - key: "http.target"
+            value: "/api/security-gateway/health"
+        action: drop
+    - match:
+        attributes:
+          - key: "http.target"
+            value: "/api/user-management/health"
+        action: drop
+    
+    # Filter by URL path
+    - match:
+        attributes:
+          - key: "http.url"
+            regex: ".*/(health|api/.*-gateway/health|api/user-management/health).*"
+        action: drop
+
+ingester:
+  trace_idle_period: 10s
+  max_block_bytes: 1_000_000
+  max_block_duration: 5m
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /tmp/tempo/traces
+
+compactor:
+  compaction:
+    block_retention: 24h  

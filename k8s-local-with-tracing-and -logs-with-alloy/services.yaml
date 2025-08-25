@@ -1,0 +1,147 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderservice
+  namespace: tracing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderservice
+  template:
+    metadata:
+      labels:
+        app: orderservice
+      annotations:
+        logging: promtail
+        logging_jobname: orderservice
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: orderservice
+        image: orderservice:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9901
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9901"
+        - name: OTEL_SERVICE_NAME
+          value: "orderservice"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderservice
+  namespace: tracing
+spec:
+  selector:
+    app: orderservice
+  ports:
+  - port: 9901
+    targetPort: 9901
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userservice
+  namespace: tracing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userservice
+  template:
+    metadata:
+      labels:
+        app: userservice
+      annotations:
+        logging: promtail
+        logging_jobname: userservice
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: userservice
+        image: userservice
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9900
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9900"
+        - name: OTEL_SERVICE_NAME
+          value: "userservice"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy:4318"
+        - name: OTEL_DOTNET_AUTO_TRACES_DISABLED_INSTRUMENTATIONS
+          value: "HttpClient"
+        - name: OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES
+          value: "*"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER
+          value: "traceidratio"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER_ARG
+          value: "1.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userservice
+  namespace: tracing
+spec:
+  selector:
+    app: userservice
+  ports:
+  - port: 9900
+    targetPort: 9900
+  type: NodePort
+
+---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: devicemanager
+#   namespace: tracing
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: devicemanager
+#   template:
+#     metadata:
+#       labels:
+#         app: devicemanager
+#       annotations:
+#         logging: promtail
+#         logging_jobname: devicemanager
+#         prometheus.io/scrape: "true"
+#         prometheus.io/port: "8080"
+#         prometheus.io/path: "/metrics"
+#     spec:
+#       containers:
+#       - name: devicemanager
+#         image: devicemanager
+#         imagePullPolicy: Never
+#         ports:
+#         - containerPort: 9902
+#         env:
+#         - name: ASPNETCORE_URLS
+#           value: "http://+:9902"
+#         - name: OTEL_SERVICE_NAME
+#           value: "userservice"
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: devicemanager
+#   namespace: tracing
+# spec:
+#   selector:
+#     app: devicemanager
+#   ports:
+#   - port: 9902
+#     targetPort: 9902
+#   type: NodePort

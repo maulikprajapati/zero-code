@@ -1,0 +1,225 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alloy-config
+  namespace: monitoring
+data:
+  config.alloy: |
+    // OTLP receiver for traces and metrics
+    otelcol.receiver.otlp "default" {
+      grpc {
+        endpoint = "0.0.0.0:4317"
+      }
+      http {
+        endpoint = "0.0.0.0:4318"
+      }
+      output {
+        traces = [otelcol.processor.filter.redis_http_only.input]
+        metrics = [otelcol.exporter.prometheus.metrics.input]
+      }
+    }
+
+    // Export metrics to Prometheus
+    otelcol.exporter.prometheus "metrics" {
+      forward_to = [prometheus.remote_write.metrics.receiver]
+    }
+
+    // Prometheus remote write for metrics
+    prometheus.remote_write "metrics" {
+      endpoint {
+        url = "http://prometheus.monitoring:9090/api/v1/write"
+      }
+    }
+
+    // Prometheus scrape for metrics
+    prometheus.scrape "otel_metrics" {
+      targets = [{"__address__" = "localhost:8889"}]
+      forward_to = [prometheus.remote_write.metrics.receiver]
+    }
+
+    // Remove Redis spans that are not part of HTTP traces
+    otelcol.processor.filter "redis_http_only" {
+      traces {
+        span = [
+          "IsMatch(name, \"^(HSET|EXEC|HMGET|LRANGE|RPOPLPUSH|SET|GET|ZRANGEBYSCORE|ZADD|ZREM|HMSET|HGET|HGETALL|LPUSH|RPUSH|LPOP|RPOP|ZRANGE|ZCARD|EXISTS|DEL|EXPIRE|TTL|INCR|DECR|MGET|MSET|FLUSHDB|FLUSHALL|KEYS|SCAN|ZSCORE|ZCOUNT|HKEYS|HVALS|LLEN|SCARD|SMEMBERS|SADD|SREM|PUBLISH|SUBSCRIBE)$\") and IsRootSpan()",
+        ]
+      }
+      output {
+        traces = [otelcol.processor.filter.health_filter.input]
+      }
+    }
+
+    // Filter health endpoints from traces
+    otelcol.processor.filter "health_filter" {
+      traces {
+        span = [
+          "IsMatch(attributes[\"http.target\"], \".*\\\\/health$\")",
+          "IsMatch(attributes[\"http.route\"], \".*\\\\/health$\")",
+          "IsMatch(attributes[\"url.path\"], \".*\\\\/health$\")",
+          "IsMatch(name, \".*(GET|POST).*\\\\/health.*\")",
+          "IsMatch(attributes[\"http.target\"], \".*debug.*pprof.*\")",
+          "IsMatch(attributes[\"url.path\"], \".*debug.*pprof.*\")",
+          "IsMatch(attributes[\"http.route\"], \".*debug.*pprof.*\")",
+          "IsMatch(name, \".*debug.*pprof.*\")",
+          "IsMatch(attributes[\"http.url\"], \".*debug.*pprof.*\")",
+        ]
+      }
+      output {
+        traces = [otelcol.exporter.otlp.tempo.input]
+      }
+    }
+
+    // Export traces to Tempo
+    otelcol.exporter.otlp "tempo" {
+      client {
+        endpoint = "http://tempo.monitoring:4317"
+        tls {
+          insecure = true
+        }
+      }
+    }
+
+    // Discover Kubernetes pods for log collection
+    discovery.kubernetes "pods" {
+      role = "pod"
+      namespaces {
+        names = ["applications"]
+      }
+    }
+
+    // Relabel targets to add proper labels
+    discovery.relabel "pod_logs" {
+      targets = discovery.kubernetes.pods.targets
+      
+      rule {
+        source_labels = ["__meta_kubernetes_namespace"]
+        target_label  = "namespace"
+      }
+      
+      rule {
+        source_labels = ["__meta_kubernetes_pod_name"]
+        target_label  = "pod"
+      }
+      
+      rule {
+        source_labels = ["__meta_kubernetes_pod_container_name"]
+        target_label  = "container"
+      }
+      
+      rule {
+        source_labels = ["__meta_kubernetes_pod_node_name"]
+        target_label  = "node_name"
+      }
+      
+      rule {
+        source_labels = ["__meta_kubernetes_pod_label_app"]
+        target_label  = "app"
+      }
+      
+      rule {
+        source_labels = ["namespace", "app"]
+        separator     = "/"
+        target_label  = "job"
+      }
+    }
+
+    // Collect container logs
+    loki.source.kubernetes "pods" {
+      targets    = discovery.relabel.pod_logs.output
+      forward_to = [loki.write.loki.receiver]
+    }
+
+    // Send logs to Loki
+    loki.write "loki" {
+      endpoint {
+        url = "http://loki.monitoring:3100/loki/api/v1/push"
+      }
+    }
+
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: alloy
+  namespace: monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: alloy
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: alloy
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: alloy
+subjects:
+- kind: ServiceAccount
+  name: alloy
+  namespace: monitoring
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alloy
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alloy
+  template:
+    metadata:
+      labels:
+        app: alloy
+    spec:
+      serviceAccountName: alloy
+      containers:
+      - name: alloy
+        image: grafana/alloy:latest
+        args:
+          - "run"
+          - "/etc/alloy/config.alloy"
+          - "--server.http.listen-addr=0.0.0.0:12345"
+        ports:
+        - containerPort: 4317
+        - containerPort: 4318
+        - containerPort: 8889
+        - containerPort: 12345
+        volumeMounts:
+        - name: alloy-config
+          mountPath: /etc/alloy
+      volumes:
+      - name: alloy-config
+        configMap:
+          name: alloy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alloy
+  namespace: monitoring
+spec:
+  selector:
+    app: alloy
+  ports:
+  - name: otlp-grpc
+    port: 4317
+    targetPort: 4317
+  - name: otlp-http
+    port: 4318
+    targetPort: 4318
+  - name: metrics
+    port: 8889
+    targetPort: 8889

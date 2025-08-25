@@ -1,0 +1,27 @@
+# Configuration for your security-gateway service
+# Add these environment variables to your security-gateway deployment
+
+# Patch your existing security-gateway deployment:
+# kubectl patch deployment security-gateway -n loadtest -p '{"spec":{"template":{"spec":{"containers":[{"name":"security-gateway","env":[{"name":"OTEL_EXPORTER_OTLP_ENDPOINT","value":"http://alloy.grafana.svc.cluster.local:4317"},{"name":"OTEL_SERVICE_NAME","value":"security-gateway"},{"name":"OTEL_RESOURCE_ATTRIBUTES","value":"service.name=security-gateway,service.version=1.0.0"},{"name":"OTEL_DOTNET_AUTO_TRACES_ENABLED","value":"true"}]}]}}}}'
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: security-gateway
+  namespace: loadtest
+spec:
+  template:
+    spec:
+      containers:
+      - name: security-gateway
+        env:
+        # OpenTelemetry Configuration - point to Alloy in grafana namespace
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.grafana.svc.cluster.local:4317"
+        - name: OTEL_SERVICE_NAME
+          value: "security-gateway"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=security-gateway,service.version=1.0.0"
+        # .NET Auto-instrumentation
+        - name: OTEL_DOTNET_AUTO_TRACES_ENABLED
+          value: "true"

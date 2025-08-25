@@ -1,0 +1,868 @@
+apiVersion: v1
+data:
+  routing.json: "{\n    \"ReRoutes\": [\n      {\n        \"Key\": \"TerrastridePadus\",\n
+    \       \"DownstreamPathTemplate\": \"/api/v4/padus{anything}\",\n        \"DownstreamScheme\":
+    \"https\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"gis.terrastride.com\",\n            \"Port\": 443\n          }\n        ],\n
+    \       \"UpstreamScheme\": \"https\",\n        \"UpstreamPathTemplate\": \"/api/v4/padus{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v4\"\n      },\n      {\n        \"Key\": \"TerrastrideHunt\",\n        \"DownstreamPathTemplate\":
+    \"/api/v4/hunt{anything}\", \n        \"DownstreamScheme\": \"https\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"gis.terrastride.com\",\n            \"Port\":
+    443\n          }\n        ],\n        \"UpstreamScheme\": \"https\",\n        \"UpstreamPathTemplate\":
+    \"/api/v4/hunt{anything}\", \n        \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v4\"\n      },\n      {\n        \"Key\": \"TerrastrideParcel\",\n        \"DownstreamPathTemplate\":
+    \"/api/v4/parcel{anything}\",\n        \"DownstreamScheme\": \"https\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"gis.terrastride.com\",\n            \"Port\":
+    443\n          }\n        ],\n        \"UpstreamScheme\": \"https\",\n        \"UpstreamPathTemplate\":
+    \"/api/v4/parcel{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\" ],\n
+    \       \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n          \"ImpersonateRole\":
+    \"User\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v4\"\n      },\n      {\n        \"Key\": \"OnDemandService\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/iot/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"ondemand-service-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/iot/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Camera\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"Key\": \"OnDemandService\",\n        \"DownstreamPathTemplate\":
+    \"/api/v2/device-management/iot/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"ondemand-service-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v2/device-management/iot/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Camera\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v2\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/device-management/iot/{anything}/ondemand\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"ondemand-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/device-management/iot/{anything}/ondemand\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/iot/liveview/camera/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"ondemand-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/iot/liveview/camera/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Camera\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"Bearer\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/iot/liveview/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"ondemand-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/iot/liveview/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/iot/{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"ondemand-service-APPENVIRON\",\n            \"Port\": 80\n          }\n        ],\n
+    \       \"UpstreamPathTemplate\": \"/api/v1/iot/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"POST\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n
+    \         \"ImpersonateRole\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"Key\": \"IntermediateRepresentationCache\",\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/ir-cache/heat-map/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"intermediate-representation-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/ir-cache/heat-map/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"POST\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n
+    \         \"ImpersonateRole\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"Key\":
+    \"IntermediateRepresentationCache\",\n        \"DownstreamPathTemplate\": \"/api/v1/ir-cache/photo-tracker/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"intermediate-representation-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/ir-cache/photo-tracker/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\", \"POST\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"Key\":
+    \"ImageUploader\",\n        \"DownstreamPathTemplate\": \"/api/v1/upload-images\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/upload-images\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/upload-live-view-recording\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/upload-live-view-recording\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/upload-ftp-image\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/upload-ftp-image\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/camera/upload{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/camera/upload{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Camera\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"Bearer\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/upload-debug-log\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/upload-debug-log\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"Bearer\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/image-uploader/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/image-uploader/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_UploadData.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_UploadData.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_RepoHQList.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_RepoHQList.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_GCM.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"image-uploader-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_GCM.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"Key\":
+    \"FileManager\",\n        \"DownstreamPathTemplate\": \"/api/v1/file-manager/hq-images\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"file-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"Camera\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"UpstreamPathTemplate\":
+    \"/api/v1/file-manager/hq-images\",\n        \"UpstreamHttpMethod\": [ \"GET\"
+    ],\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/debug-logs\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"file-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"UpstreamPathTemplate\":
+    \"/api/v1/debug-logs\",\n        \"UpstreamHttpMethod\": [ \"GET\", \"PUT\", \"DELETE\"
+    ],\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/debug-logs/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"file-manager-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"UpstreamPathTemplate\": \"/api/v1/debug-logs/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"DELETE\" ],\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/Device_GetHQList.aspx\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"file-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_GetHQList.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/retrieval/{anything}\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"retrieval-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/retrieval/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"DELETE\", \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/file-manager/{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"file-manager-APPENVIRON\",\n            \"Port\": 80\n          }\n        ],\n
+    \       \"UpstreamPathTemplate\": \"/api/v1/file-manager/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\", \"DELETE\", \"POST\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/file-manager/{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"file-manager-APPENVIRON\",\n            \"Port\": 80\n          }\n        ],\n
+    \       \"UpstreamPathTemplate\": \"/api/file-manager/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ]\n      },\n      {\n        \"Key\": \"FileManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v2/file-manager/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"file-manager-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v2/file-manager/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"DELETE\", \"POST\", \"PATCH\", \"PUT\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v2\"\n      },\n      {\n        \"Key\": \"FileManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v3/file-manager/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"file-manager-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v3/file-manager/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"POST\", \"PUT\", \"DELETE\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"User,Administrator\",\n          \"ImpersonateRole\": \"User,Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v3\"\n      },\n      {\n        \"Key\": \"FileManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v4/file-manager/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"file-manager-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v4/file-manager/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"POST\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User,Administrator\",\n
+    \         \"ImpersonateRole\": \"User,Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v4\"\n      },\n      {\n        \"Key\":
+    \"FileManager\",\n        \"DownstreamPathTemplate\": \"/api/v5/file-manager/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"file-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v5/file-manager/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v5\"\n      },\n      {\n        \"Key\": \"FileManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v6/file-manager/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"file-manager-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v6/file-manager/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"POST\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User,Administrator\",\n
+    \         \"ImpersonateRole\": \"User,Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v6\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v3/recognition-management/{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"file-manager-APPENVIRON\",\n            \"Port\": 80\n          }\n        ],\n
+    \       \"UpstreamPathTemplate\": \"/api/v3/recognition-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/animal-recognition-notifications\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"file-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/animal-recognition-notifications\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/firmware-file-manager/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"file-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/firmware-file-manager/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/download/temp-file\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"file-manager-APPENVIRON\",\n            \"Port\": 80\n          }\n        ],\n
+    \       \"UpstreamPathTemplate\": \"/api/v1/download/temp-file\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"Key\": \"UserManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/user-management/customers\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"usermanager\",\n
+    \           \"Port\": 9901\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/user-management/customers\",\n        \"UpstreamHttpMethod\": [ \"GET\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/user-management/customer\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"usermanager\",\n
+    \           \"Port\": 9901\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/user-management/customer\",\n        \"UpstreamHttpMethod\": [ \"GET\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/user-management/roles\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/roles\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"RoleManager\",\n          \"ImpersonateRole\": \"RoleManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/user-management/roles/customers\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/roles/customers\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"RoleManager\",\n          \"ImpersonateRole\": \"RoleManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/user-management/roles/customer/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/roles/customer/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"RoleManager\",\n          \"ImpersonateRole\": \"RoleManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/user-management/admin/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/admin/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/user-management/credit\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/credit\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"DELETE\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"RefunderAndVoid\",\n          \"ImpersonateRole\": \"RefunderAndVoid\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/user-management/report/billing-history\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/report/billing-history\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/user-management/report/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/report/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Analyst\",\n          \"ImpersonateRole\": \"Analyst\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/user-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"DELETE\", \"POST\", \"PUT\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User,Administrator\",\n
+    \         \"ImpersonateRole\": \"User,Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/user-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/user-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ]\n      },\n      {\n        \"Key\":
+    \"UserManager\",\n        \"DownstreamPathTemplate\": \"/api/v2/user-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v2/user-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v2\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/user-feedback\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-feedback\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"PUT\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/user-feedback\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"usermanager\",\n            \"Port\": 9901\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/user-feedback\",\n        \"UpstreamHttpMethod\": [ \"GET\", \"PUT\" ]\n
+    \     },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/user-event\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-event\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/user-event\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"usermanager\",\n            \"Port\": 9901\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/user-event\",\n        \"UpstreamHttpMethod\": [ \"POST\", \"PATCH\" ]\n
+    \     },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/user-information/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/user-information/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/user-information/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"usermanager\",\n            \"Port\": 9901\n
+    \         }\n        ],\n        \"UpstreamPathTemplate\": \"/api/user-information/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/1234567890.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/1234567890.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_CheckBind.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_CheckBind.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_Query.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_Query.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_SetInformation.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_SetInformation.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_GetInformation.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_GetInformation.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/Device_ConfirmNetState.aspx\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/Device_ConfirmNetState.aspx\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/devices/versions?platform={anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \ \"devicemanager\",\n            \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/devices/versions?platform={anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    null,\n          \"AllowedScopes\": []\n        },\n        \"Priority\": 1,\n
+    \       \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/devices/versions/all\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \ \"devicemanager\",\n            \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/devices/versions/all\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    null,\n          \"AllowedScopes\": []\n        },\n        \"Priority\": 1,\n
+    \       \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/camera/{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \ \"devicemanager\",\n            \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/camera/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\", \"PUT\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"Camera\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v2/device-management/feeder/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v2/device-management/feeder/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"PUT\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Camera\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v2\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v2/device-management/camera/{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \ \"devicemanager\",\n            \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v2/device-management/camera/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\", \"PUT\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"Camera\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v2\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/device-management/devices/{physicalDeviceIdentifier}/re-onboard\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/device-management/devices/{physicalDeviceIdentifier}/re-onboard\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/devices/{physicalDeviceIdentifier}/re-onboard-cancel\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/device-management/devices/{physicalDeviceIdentifier}/re-onboard-cancel\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/thresholds/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":  \"devicemanager\",\n
+    \           \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/thresholds/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"DELETE\", \"POST\", \"PUT\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"FirmwareManager\",\n          \"ImpersonateRole\": \"FirmwareManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\",\n        \"QoSOptions\": {\n          \"TimeoutValue\": 300000\n        }\n
+    \     },\n      {\n        \"Key\": \"Rws\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/pws/status\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"rws-service-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/pws/status\",\n        \"UpstreamHttpMethod\": [ \"GET\"
+    ],\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    null,\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\": \"v1\"\n
+    \     },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/device-management/pws/status/history\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"rws-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/device-management/pws/status/history\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": null,\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/pws/status/aggregation/history\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"rws-service-APPENVIRON\",\n            \"Port\": 80\n          }\n        ],\n
+    \       \"UpstreamPathTemplate\": \"/api/v1/device-management/pws/status/aggregation/history\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"Bearer\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/pws/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"rws-service-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/pws/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"PUT\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Camera\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"Key\": \"DeviceManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":  \"devicemanager\",\n
+    \           \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"DELETE\", \"POST\", \"PUT\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\",\n        \"QoSOptions\": {\n          \"TimeoutValue\": 300000\n        }\n
+    \     },\n      {\n        \"Key\": \"DeviceManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v2/device-management/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":  \"devicemanager\",\n
+    \           \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v2/device-management/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"DELETE\", \"POST\", \"PUT\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"User,Administrator\",\n          \"ImpersonateRole\": \"User,Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v2\",\n        \"QoSOptions\": {\n          \"TimeoutValue\": 300000\n        }\n
+    \     },\n      {\n        \"Key\": \"DeviceManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v3/device-management/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":  \"devicemanager\",\n
+    \           \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v3/device-management/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"DELETE\", \"POST\", \"PUT\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v3\",\n        \"QoSOptions\": {\n          \"TimeoutValue\": 300000\n        }\n
+    \     },\n      {\n        \"Key\": \"DeviceManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v4/device-management/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":  \"devicemanager\",\n
+    \           \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v4/device-management/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"DELETE\", \"POST\", \"PUT\", \"PATCH\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v4\",\n        \"QoSOptions\": {\n          \"TimeoutValue\": 300000\n        }\n
+    \     },\n      {\n        \"DownstreamPathTemplate\": \"/api/device-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/device-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/devices/{deviceIdentifier}/subscription\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \ \"devicemanager\",\n            \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/devices/{deviceIdentifier}/subscription\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"Priority\": 2,\n        \"ApiVersion\": \"v1\"\n      },\n
+    \     {\n        \"DownstreamPathTemplate\": \"/api/v2/device-management/devices/{deviceIdentifier}/subscription\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v2/device-management/devices/{deviceIdentifier}/subscription\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"Priority\":
+    2,\n        \"ApiVersion\": \"v2\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/device-management/devices/search\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":  \"devicemanager\",\n
+    \           \"Port\": 9902\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/device-management/devices/search\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/customer-metrics\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/customer-metrics\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/sim-information/from-file\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/sim-information/from-file\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"FirmwareManager\",\n          \"ImpersonateRole\": \"FirmwareManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/sim-information/sim-export\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/sim-information/sim-export\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"FirmwareManager\",\n          \"ImpersonateRole\": \"FirmwareManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/sim-information/test-imei\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/sim-information/test-imei\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"TestImeiManager\",\n          \"ImpersonateRole\": \"TestImeiManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/sim-information/deactivate/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/sim-information/deactivate/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/firmware-management/file/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/firmware-management/file/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/firmware-management/device/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/firmware-management/device/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Camera\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"Bearer\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/firmware-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/firmware-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/firmware-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/firmware-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"DELETE\", \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"FirmwareManager\",\n          \"ImpersonateRole\": \"FirmwareManager\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"Key\": \"DeviceManager\",\n        \"DownstreamPathTemplate\": \"/api/v1/weather\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/weather\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"Key\": \"DeviceManager\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/weather/historical\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\":  \"devicemanager\",\n            \"Port\":
+    9902\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/weather/historical\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User,Administrator\",\n          \"ImpersonateRole\":
+    \"User,Administrator\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/subscription-management/basic/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/subscription-management/basic/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\", \"PUT\", \"DELETE\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v2/subscription-management/basic/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v2/subscription-management/basic/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\", \"PUT\", \"DELETE\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"DownstreamPathTemplate\": \"/api/v1/promo-code{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"subscription-manager-APPENVIRON\",\n            \"Port\": 80\n          }\n
+    \       ],\n        \"UpstreamPathTemplate\": \"/api/v1/promo-code{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\", \"PUT\", \"DELETE\", \"GET\" ],\n
+    \       \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/subscription-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/subscription-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/subscription-management/features\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/subscription-management/features\",\n        \"UpstreamHttpMethod\":
+    [ \"PUT\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/subscription-management/admin/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/subscription-management/admin/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Administrator\",\n
+    \         \"ImpersonateRole\": \"Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/subscription-management/camera-subscriptions/start-price-migration\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/subscription-management/camera-subscriptions/start-price-migration\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"Administrator\",\n          \"ImpersonateRole\": \"Administrator\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        }\n      },\n      {\n
+    \       \"Key\": \"SubscriptionService\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/subscription-management/{anything}\",\n        \"DownstreamScheme\":
+    \"http\",\n        \"DownstreamHostAndPorts\": [\n          {\n            \"Host\":
+    \"subscription-manager-APPENVIRON\",\n            \"Port\": 80\n          }\n
+    \       ],\n        \"UpstreamPathTemplate\": \"/api/v1/subscription-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User,Administrator\",\n
+    \         \"ImpersonateRole\": \"User,Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\",\n        \"QoSOptions\": {\n          \"TimeoutValue\":
+    200000\n        }\n      },\n      {\n        \"Key\": \"SubscriptionService\",\n
+    \       \"DownstreamPathTemplate\": \"/api/v2/subscription-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v2/subscription-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User,Administrator\",\n
+    \         \"ImpersonateRole\": \"User,Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v2\"\n      },\n      {\n        \"Key\":
+    \"SubscriptionService\",\n        \"DownstreamPathTemplate\": \"/api/v3/subscription-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v3/subscription-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User,Administrator\",\n
+    \         \"ImpersonateRole\": \"User,Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v3\"\n      },\n      {\n        \"Key\":
+    \"SubscriptionService\",\n        \"DownstreamPathTemplate\": \"/api/v4/subscription-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"subscription-manager-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v4/subscription-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User,Administrator\",\n
+    \         \"ImpersonateRole\": \"User,Administrator\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v4\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/v1/payment/webhook/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"payment-gateway-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/payment/webhook/{anything}\",\n        \"UpstreamHttpMethod\": [ \"POST\"
+    ],\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/payment-gateway/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"payment-gateway-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/payment-gateway/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\"
+    ]\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/media-archiver/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"media-archiver-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/media-archiver/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ]\n      },\n      {\n        \"DownstreamPathTemplate\":
+    \"/api/scheduler-service/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"scheduler-manager-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/scheduler-service/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\"
+    ]\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/notification-service/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"notification-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/notification-service/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ]\n      },\n      {\n        \"Key\":
+    \"NotificationService\",\n        \"DownstreamPathTemplate\": \"/api/v1/notification-manager/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"notification-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/notification-manager/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\", \"DELETE\", \"PATCH\" ],\n        \"ApiVersion\":
+    \"v1\",\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n
+    \         \"ImpersonateRole\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/message-center/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"notification-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/message-center/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"DELETE\", \"PATCH\" ],\n
+    \       \"ApiVersion\": \"v1\",\n        \"RouteClaimsRequirement\": {\n          \"Role\":
+    \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        }\n      },\n      {\n        \"Key\": \"FileProxy\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/file-proxy/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"file-proxy-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/file-proxy/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n          \"ImpersonateRole\":
+    \"User\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"Key\": \"ConfiguratorService\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/configurator-service/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"configurator-service-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/configurator-service/{anything}\",\n        \"UpstreamHttpMethod\":
+    [ \"GET\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n
+    \         \"ImpersonateRole\": \"User\"\n        },\n        \"AuthenticationOptions\":
+    {\n          \"AuthenticationProviderKey\": \"JWT_OR_COOKIE\",\n          \"AllowedScopes\":
+    []\n        },\n        \"ApiVersion\": \"v1\"\n      },\n      {\n        \"Key\":
+    \"MarkerService\",\n        \"DownstreamPathTemplate\": \"/api/v1/marker-management/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"marker-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/marker-management/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"DELETE\", \"POST\", \"PATCH\" ],\n
+    \       \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n          \"ImpersonateRole\":
+    \"User\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"Key\": \"PredictorService\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/predictor-service/\",\n        \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\":
+    [\n          {\n            \"Host\": \"predictor-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/predictor-service/\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"Key\": \"FeederService\",\n        \"DownstreamPathTemplate\":
+    \"/api/v1/feeder-service/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"feeder-service-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v1/feeder-service/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"PUT\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Camera\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"Key\": \"FeederService\",\n        \"DownstreamPathTemplate\":
+    \"/api/v2/feeder-service/{anything}\",\n        \"DownstreamScheme\": \"http\",\n
+    \       \"DownstreamHostAndPorts\": [\n          {\n            \"Host\": \"feeder-service-APPENVIRON\",\n
+    \           \"Port\": 80\n          }\n        ],\n        \"UpstreamPathTemplate\":
+    \"/api/v2/feeder-service/{anything}\",\n        \"UpstreamHttpMethod\": [ \"GET\",
+    \"PUT\" ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"Camera\"\n
+    \       },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"Bearer\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v2\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/iot/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"feeder-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/feeder-service/iot/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"POST\" ],\n        \"RouteClaimsRequirement\":
+    {\n          \"Role\": \"User\",\n          \"ImpersonateRole\": \"User\"\n        },\n
+    \       \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      },\n      {\n        \"DownstreamPathTemplate\": \"/api/v1/feeder/{anything}\",\n
+    \       \"DownstreamScheme\": \"http\",\n        \"DownstreamHostAndPorts\": [\n
+    \         {\n            \"Host\": \"feeder-service-APPENVIRON\",\n            \"Port\":
+    80\n          }\n        ],\n        \"UpstreamPathTemplate\": \"/api/v1/feeder/{anything}\",\n
+    \       \"UpstreamHttpMethod\": [ \"GET\", \"POST\", \"PUT\", \"DELETE\", \"PATCH\"
+    ],\n        \"RouteClaimsRequirement\": {\n          \"Role\": \"User\",\n          \"ImpersonateRole\":
+    \"User\"\n        },\n        \"AuthenticationOptions\": {\n          \"AuthenticationProviderKey\":
+    \"JWT_OR_COOKIE\",\n          \"AllowedScopes\": []\n        },\n        \"ApiVersion\":
+    \"v1\"\n      }\n    ],\n    \"GlobalConfiguration\": {}\n  }"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: routing-config
+  namespace: applications

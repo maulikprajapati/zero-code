@@ -1,0 +1,48 @@
+{
+  "NLog": {
+    "throwConfigExceptions": true,
+    "targets": {
+      "logconsole": {
+        "type": "ColoredConsole",
+        "layout": "{\"timestamp\":\"${longdate}\",\"level\":\"${level:uppercase=true}\",\"logger\":\"${logger}\",\"traceId\":\"${mdlc:item=TraceId}\",\"spanId\":\"${mdlc:item=SpanId}\",\"message\":\"${message}\",\"exception\":\"${exception:format=tostring}\"}",
+        "rowHighlightingRules": [
+          {
+            "condition": "level == LogLevel.Info",
+            "foregroundColor": "White"
+          },
+          {
+            "condition": "level == LogLevel.Debug",
+            "foregroundColor": "Gray"
+          },
+          {
+            "condition": "level == LogLevel.Warn",
+            "foregroundColor": "Yellow"
+          },
+          {
+            "condition": "level == LogLevel.Error",
+            "foregroundColor": "Red"
+          }
+        ]
+      }
+    },
+    "rules": {
+      "0": {
+        "logger": "Microsoft.Hosting.Lifetime",
+        "minLevel": "Info",
+        "writeTo": "logconsole",
+        "final": true
+      },
+      "1": {
+        "logger": "Microsoft.*",
+        "minLevel": "Warn",
+        "writeTo": "logconsole",
+        "final": true
+      },
+      "2": {
+        "logger": "*",
+        "minLevel": "Info",
+        "writeTo": "logconsole"
+      }
+    }
+  }
+}

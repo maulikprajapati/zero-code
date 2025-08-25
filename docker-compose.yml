@@ -1,0 +1,104 @@
+services:
+  userservice:
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - orderservice
+      - tempo
+    networks:
+      - tracing-network
+    labels:
+      - "logging=promtail"
+      - "logging_jobname=UserService"
+
+  orderservice:
+    build:
+      context: ./OrderService
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - tempo
+      - postgres
+    networks:
+      - tracing-network
+    labels:
+      - "logging=promtail"
+      - "logging_jobname=OrderService"
+
+  tempo:
+    image: grafana/tempo:2.3.1
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+      - tempo-data:/var/tempo
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - tracing-network
+
+  postgres:
+    image: postgres:15.5
+    environment:
+      - POSTGRES_DB=orderdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - tracing-network
+
+  loki:
+    image: grafana/loki:2.9.4
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki-data:/loki
+    networks:
+      - tracing-network
+
+  promtail:
+    image: grafana/promtail:2.9.4
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - tracing-network
+
+  grafana:
+    image: grafana/grafana:10.2.3
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - tempo
+      - loki
+    networks:
+      - tracing-network
+
+volumes:
+  tempo-data:
+  grafana-data:
+  postgres-data:
+  loki-data:
+
+networks:
+  tracing-network:
+    driver: bridge

@@ -1,0 +1,46 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 9009
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["ApiGateway.csproj", "."]
+RUN dotnet restore "ApiGateway.csproj"
+COPY . .
+RUN dotnet build "ApiGateway.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "ApiGateway.csproj" -c Release -o /app/publish
+
+
+ENV ASPNETCORE_URLS=http://+:9009
+
+FROM base AS final
+WORKDIR /app
+
+
+# Install .NET auto-instrumentation
+RUN apt-get update && apt-get install -y curl unzip
+RUN curl -sSfL https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/otel-dotnet-auto-install.sh -O
+RUN chmod +x otel-dotnet-auto-install.sh
+RUN ./otel-dotnet-auto-install.sh
+RUN chmod +x /root/.otel-dotnet-auto/instrument.sh
+
+COPY --from=publish /app/publish .
+
+ENV OTEL_SERVICE_NAME=ApiGateway
+# ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4318
+ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://alloy:4318
+ENV OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+ENV OTEL_LOG_LEVEL=debug
+ENV OTEL_DOTNET_AUTO_TRACES_ENABLED=true
+ENV Logging__Console__FormatterName=json
+ENV CORECLR_ENABLE_PROFILING=1
+ENV OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS=/debug/pprof.*
+ENV CORECLR_PROFILER={918728DD-259F-4A6A-AC2B-B85E1B658318}
+ENV CORECLR_PROFILER_PATH=/root/.otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so
+ENV DOTNET_STARTUP_HOOKS=/root/.otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll
+ENV DOTNET_ADDITIONAL_DEPS=/root/.otel-dotnet-auto/AdditionalDeps
+ENV DOTNET_SHARED_STORE=/root/.otel-dotnet-auto/store
+
+ENTRYPOINT ["/root/.otel-dotnet-auto/instrument.sh", "dotnet", "ApiGateway.dll"]

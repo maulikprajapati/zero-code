@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyroscope
+  namespace: tracing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pyroscope
+  template:
+    metadata:
+      labels:
+        app: pyroscope
+    spec:
+      containers:
+      - name: pyroscope
+        image: grafana/pyroscope:latest
+        ports:
+        - containerPort: 4040
+        env:
+        - name: PYROSCOPE_LOG_LEVEL
+          value: "debug"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pyroscope
+  namespace: tracing
+spec:
+  selector:
+    app: pyroscope
+  ports:
+  - name: http
+    port: 4040
+    targetPort: 4040

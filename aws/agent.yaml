@@ -1,0 +1,268 @@
+# Kubernetes deployment for Grafana Agent with trace filtering
+
+---
+# Grafana Agent ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-agent-config
+  namespace: grafana
+data:
+  agent.yaml: |
+    # Older Grafana Agent configuration format
+    server:
+      log_level: info
+      http_listen_address: 0.0.0.0
+      http_listen_port: 12345
+
+    traces:
+      configs:
+        - name: default
+          # Receivers configuration
+          receivers:
+            otlp:
+              protocols:
+                grpc:
+                  endpoint: 0.0.0.0:4317
+                http:
+                  endpoint: 0.0.0.0:4318
+          
+          # Remote write to Tempo
+          remote_write:
+            - endpoint: http://tempo:3200
+              insecure: true
+          
+          # Batch settings
+          batch:
+            timeout: 1s
+            send_batch_size: 1024
+          
+          # Sampling rules to filter health checks
+          tail_sampling:
+            policies:
+              - name: exclude_health_checks
+                type: string_attribute
+                string_attribute:
+                  key: http.route
+                  values:
+                    - "/health"
+                    - "/api/health"
+                    - "/v1/health"
+                    - "/service/health"
+                  invert_match: true
+              - name: exclude_health_targets
+                type: string_attribute
+                string_attribute:
+                  key: http.target
+                  values:
+                    - "/health"
+                    - "/api/health"
+                    - "/v1/health"
+                    - "/service/health"
+# Grafana Agent Flow Configuration (for latest version)
+
+---
+# Grafana Agent ConfigMap with Flow syntax
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-agent-config
+  namespace: grafana
+data:
+  config.river: |
+    // OTLP receiver for traces
+    otelcol.receiver.otlp "default" {
+      grpc {
+        endpoint = "0.0.0.0:4317"
+      }
+      http {
+        endpoint = "0.0.0.0:4318"
+      }
+      
+      output {
+        traces = [otelcol.processor.filter.health_filter.input]
+      }
+    }
+
+    // Filter processor to exclude health check traces
+    otelcol.processor.filter "health_filter" {
+      traces {
+        span = [
+          // Filter out spans where http.route ends with /health
+          "attributes[\"http.route\"] != nil and IsMatch(attributes[\"http.route\"], \".*\\\\/health$\")",
+          // Filter out spans where http.target ends with /health
+          "attributes[\"http.target\"] != nil and IsMatch(attributes[\"http.target\"], \".*\\\\/health$\")",
+        ]
+      }
+      
+      output {
+        traces = [otelcol.processor.batch.default.input]
+      }
+    }
+
+    // Batch processor for performance
+    otelcol.processor.batch "default" {
+      timeout = "1s"
+      send_batch_size = 1024
+      
+      output {
+        traces = [otelcol.exporter.otlp.tempo.input]
+      }
+    }
+
+    // OTLP exporter to send traces to Tempo
+    otelcol.exporter.otlp "tempo" {
+      client {
+        endpoint = "http://tempo:3200"
+        tls {
+          insecure = true
+        }
+      }
+    }
+
+---
+# Grafana Agent Deployment (updated for Flow mode)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-agent
+  namespace: grafana
+  labels:
+    app: grafana-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-agent
+  template:
+    metadata:
+      labels:
+        app: grafana-agent
+    spec:
+      containers:
+      - name: grafana-agent
+        image: grafana/agent:latest
+        args:
+        - run
+        - /etc/agent/config.river
+        - --server.http.listen-addr=0.0.0.0:12345
+        - --disable-reporting
+        ports:
+        - containerPort: 4317
+          name: otlp-grpc
+          protocol: TCP
+        - containerPort: 4318
+          name: otlp-http
+          protocol: TCP
+        - containerPort: 12345
+          name: http-metrics
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          mountPath: /etc/agent
+          readOnly: true
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: 12345
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 12345
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        env:
+        - name: AGENT_MODE
+          value: "flow"
+      volumes:
+      - name: config
+        configMap:
+          name: grafana-agent-config
+
+---
+# Grafana Agent Service (unchanged)
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-agent-service
+  namespace: grafana
+  labels:
+    app: grafana-agent
+spec:
+  selector:
+    app: grafana-agent
+  ports:
+  - name: otlp-grpc
+    port: 4317
+    targetPort: 4317
+    protocol: TCP
+  - name: otlp-http
+    port: 4318
+    targetPort: 4318
+    protocol: TCP
+  - name: http-metrics
+    port: 12345
+    targetPort: 12345
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Updated Tempo ConfigMap (modify your existing one)
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: tempo-config
+#   namespace: grafana
+# data:
+#   tempo.yaml: |
+#     server:
+#       http_listen_port: 3200
+
+#     # Remove OTLP receivers from Tempo since Agent will forward traces
+#     distributor:
+#       receivers:
+#         otlp:
+#           protocols:
+#             grpc:
+#               endpoint: 0.0.0.0:3200  # Different port to avoid conflicts
+#             http:
+#               endpoint: 0.0.0.0:3201
+
+#     ingester:
+#       max_block_duration: 5m
+
+#     compactor:
+#       compaction:
+#         block_retention: 1h
+
+#     storage:
+#       trace:
+#         backend: local
+#         local:
+#           path: /var/tempo/traces
+#         wal:
+#           path: /var/tempo/wal
+#         pool:
+#           max_workers: 100
+#           queue_depth: 10000
+
+---
+# Application Configuration Instructions
+# Update your applications to send traces to Grafana Agent instead of Tempo:
+#
+# Before:
+# OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo-service:4317
+#
+# After:
+# OTEL_EXPORTER_OTLP_ENDPOINT=http://grafana-agent-service:4317  # for gRPC
+# or
+# OTEL_EXPORTER_OTLP_ENDPOINT=http://grafana-agent-service:4318  # for HTTP

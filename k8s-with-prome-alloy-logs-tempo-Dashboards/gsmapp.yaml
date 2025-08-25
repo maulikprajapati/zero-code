@@ -1,0 +1,211 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securitygateway
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: securitygateway
+  template:
+    metadata:
+      labels:
+        app: securitygateway
+      annotations:
+        logging: promtail
+        logging_jobname: securitygateway
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: securitygateway
+        image: securitygateway:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9900
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9900"
+        - name: OTEL_SERVICE_NAME
+          value: "securitygateway"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_DOTNET_AUTO_TRACES_DISABLED_INSTRUMENTATIONS
+          value: "HttpClient"
+        - name: OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES
+          value: "*"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER
+          value: "traceidratio"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER_ARG
+          value: "1.0"
+        - name: OTEL_BSP_MAX_EXPORT_BATCH_SIZE
+          value: "1"
+        - name: OTEL_BSP_EXPORT_TIMEOUT
+          value: "1000"
+        - name: OTEL_BSP_SCHEDULE_DELAY
+          value: "100"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof*"
+        - name: ConnectionStrings__DefaultConnection
+          value: "Host=postgres.applications;Database=orderdb;Username=postgres;Password=password"
+        - name: OTEL_DOTNET_AUTO_TRACES_ASPNETCORE_INSTRUMENTATION_CAPTURE_REQUEST_HEADERS
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_TRACES_HTTP_INSTRUMENTATION_RECORD_EXCEPTION
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_TRACES_ASPNETCORE_INSTRUMENTATION_ENRICH_WITH_HTTP_REQUEST
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_TRACES_ASPNETCORE_INSTRUMENTATION_ENRICH_WITH_HTTP_RESPONSE
+          value: "true"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=apigateway,service.version=1.0.0"
+        volumeMounts:
+        - name: routing-config
+          mountPath: /app/routing.json
+          subPath: routing.json
+      volumes:
+      - name: routing-config
+        configMap:
+          name: routing-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securitygateway
+  namespace: applications
+spec:
+  selector:
+    app: securitygateway
+  ports:
+  - port: 9900
+    targetPort: 9900
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usermanager
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: usermanager
+  template:
+    metadata:
+      labels:
+        app: usermanager
+      annotations:
+        logging: promtail
+        logging_jobname: usermanager
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: usermanager
+        image: usermanager
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9901
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9901"
+        - name: OTEL_SERVICE_NAME
+          value: "usermanager"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_DOTNET_AUTO_TRACES_DISABLED_INSTRUMENTATIONS
+          value: "HttpClient"
+        - name: OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES
+          value: "*"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER
+          value: "traceidratio"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER_ARG
+          value: "1.0"
+        - name: OTEL_BSP_MAX_EXPORT_BATCH_SIZE
+          value: "1"
+        - name: OTEL_BSP_EXPORT_TIMEOUT
+          value: "1000"
+        - name: OTEL_BSP_SCHEDULE_DELAY
+          value: "100"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof*"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: usermanager
+  namespace: applications
+spec:
+  selector:
+    app: usermanager
+  ports:
+  - port: 9901
+    targetPort: 9901
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devicemanager
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devicemanager
+  template:
+    metadata:
+      labels:
+        app: devicemanager
+      annotations:
+        logging: promtail
+        logging_jobname: devicemanager
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: devicemanager
+        image: devicemanager:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9902
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9902"
+        - name: OTEL_SERVICE_NAME
+          value: "devicemanager"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_DOTNET_AUTO_TRACES_DISABLED_INSTRUMENTATIONS
+          value: "HttpClient"
+        - name: OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES
+          value: "*"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER
+          value: "traceidratio"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER_ARG
+          value: "1.0"
+        - name: OTEL_BSP_MAX_EXPORT_BATCH_SIZE
+          value: "1"
+        - name: OTEL_BSP_EXPORT_TIMEOUT
+          value: "1000"
+        - name: OTEL_BSP_SCHEDULE_DELAY
+          value: "100"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof*,/debug/*"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devicemanager
+  namespace: applications
+spec:
+  selector:
+    app: devicemanager
+  ports:
+  - port: 9902
+    targetPort: 9902
+  type: NodePort

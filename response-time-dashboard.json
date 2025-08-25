@@ -1,0 +1,122 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Service Response Time Dashboard",
+    "tags": ["apm", "response-time"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Average Response Time by Service",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le, service_name))",
+            "legendFormat": "{{service_name}} - P50",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 0.1},
+                {"color": "red", "value": 0.5}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "P95 Response Time by Service",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le, service_name))",
+            "legendFormat": "{{service_name}} - P95",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 0.2},
+                {"color": "red", "value": 1.0}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Response Time Trend",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le, service_name))",
+            "legendFormat": "{{service_name}} - P50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le, service_name))",
+            "legendFormat": "{{service_name}} - P95",
+            "refId": "B"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Request Rate by Service",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(rate(http_server_request_duration_seconds_count[5m])) by (service_name)",
+            "legendFormat": "{{service_name}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Error Rate by Service",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(rate(http_server_request_duration_seconds_count{http_response_status_code!~\"2..\"}[5m])) by (service_name)",
+            "legendFormat": "{{service_name}} - Errors",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps",
+            "color": {"mode": "palette-classic"}
+          }
+        }
+      }
+    ],
+    "time": {"from": "now-1h", "to": "now"},
+    "refresh": "5s"
+  }
+}

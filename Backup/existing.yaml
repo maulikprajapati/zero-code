@@ -1,0 +1,87 @@
+apiVersion: v1
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus.monitoring.svc.cluster.local:9090
+    - jsonData:
+        authType: default
+        defaultRegion: us-east-1
+      name: CloudWatch
+      type: cloudwatch
+    - access: proxy
+      isDefault: false
+      jsonData:
+        maxLines: 500
+        minTime: null
+        timeFormat: iso
+        timeout: 600
+      name: Loki
+      type: loki
+      url: http://loki-gateway:80
+  download_dashboards.sh: "#!/usr/bin/env sh\nset -euf\n\ncurl -skf \\\n--connect-timeout
+    60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type:
+    application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/6417\"
+    \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g'
+    \\\n> \"/var/lib/grafana/dashboards/default/0.json\"\n  \ncurl -skf \\\n--connect-timeout
+    60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type:
+    application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/10759\"
+    \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g'
+    \\\n> \"/var/lib/grafana/dashboards/default/1.json\"\n  \ncurl -skf \\\n--connect-timeout
+    60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type:
+    application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/1860\"
+    \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g'
+    \\\n> \"/var/lib/grafana/dashboards/default/2.json\"\n  \ncurl -skf \\\n--connect-timeout
+    60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type:
+    application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/10939\"
+    \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g'
+    \\\n> \"/var/lib/grafana/dashboards/default/3.json\"\n  \ncurl -skf \\\n--connect-timeout
+    60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type:
+    application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/7149\"
+    \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g'
+    \\\n> \"/var/lib/grafana/dashboards/default/4.json\"\n"
+  grafana.ini: |
+    [analytics]
+    check_for_updates = true
+    [dataproxy]
+    keep_alive_seconds = 600
+    row_limit = 1e+07
+    timeout = 600
+    [grafana_net]
+    url = https://grafana.net
+    [log]
+    mode = console
+    [paths]
+    data = /var/lib/grafana/
+    logs = /var/log/grafana
+    plugins = /var/lib/grafana/plugins
+    provisioning = /etc/grafana/provisioning
+    [server]
+    domain = lgraf.stealthcamcommand.com
+    root_url = https://%(domain)s/grafana/
+    serve_from_sub_path = true
+    [smtp]
+    enabled = true
+    from_address = noreply@stealthcamcommand.com
+    from_name = grafana-stealthcam-loadtest
+    host = email-smtp.us-east-1.amazonaws.com:587
+    skip_verify = true
+  plugins: grafana-piechart-panel,grafana-worldmap-panel,grafana-polystat-panel,grafana-clock-panel,grafana-simple-json-datasource
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"datasources.yaml":"apiVersion: 1\ndatasources:\n- name: Prometheus\n  type: prometheus\n  url: http://prometheus.monitoring.svc.cluster.local:9090\n- jsonData:\n    authType: default\n    defaultRegion: us-east-1\n  name: CloudWatch\n  type: cloudwatch\n- access: proxy\n  isDefault: false\n  jsonData:\n    maxLines: 500\n    minTime: null\n    timeFormat: iso\n    timeout: 600\n  name: Loki\n  type: loki\n  url: http://loki-gateway:80\n","download_dashboards.sh":"#!/usr/bin/env sh\nset -euf\n\ncurl -skf \\\n--connect-timeout 60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type: application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/6417\" \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g' \\\n\u003e \"/var/lib/grafana/dashboards/default/0.json\"\n  \ncurl -skf \\\n--connect-timeout 60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type: application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/10759\" \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g' \\\n\u003e \"/var/lib/grafana/dashboards/default/1.json\"\n  \ncurl -skf \\\n--connect-timeout 60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type: application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/1860\" \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g' \\\n\u003e \"/var/lib/grafana/dashboards/default/2.json\"\n  \ncurl -skf \\\n--connect-timeout 60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type: application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/10939\" \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g' \\\n\u003e \"/var/lib/grafana/dashboards/default/3.json\"\n  \ncurl -skf \\\n--connect-timeout 60 \\\n--max-time 60 \\\n-H \"Accept: application/json\" \\\n-H \"Content-Type: application/json;charset=UTF-8\" \\\n  \"https://grafana.com/grafana/dashboards/7149\" \\\n  | sed '/-- .* --/! s/\"datasource\":.*,/\"datasource\": \"Prometheus\",/g' \\\n\u003e \"/var/lib/grafana/dashboards/default/4.json\"\n","grafana.ini":"[analytics]\ncheck_for_updates = true\n[dataproxy]\nkeep_alive_seconds = 600\nrow_limit = 1e+07\ntimeout = 600\n[grafana_net]\nurl = https://grafana.net\n[log]\nmode = console\n[paths]\ndata = /var/lib/grafana/\nlogs = /var/log/grafana\nplugins = /var/lib/grafana/plugins\nprovisioning = /etc/grafana/provisioning\n[server]\ndomain = lgraf.stealthcamcommand.com\nroot_url = https://%(domain)s/grafana/\nserve_from_sub_path = true\n[smtp]\nenabled = true\nfrom_address = noreply@stealthcamcommand.com\nfrom_name = grafana-stealthcam-loadtest\nhost = email-smtp.us-east-1.amazonaws.com:587\nskip_verify = true\n","plugins":"grafana-piechart-panel,grafana-worldmap-panel,grafana-polystat-panel,grafana-clock-panel,grafana-simple-json-datasource"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app.kubernetes.io/instance":"grafana","app.kubernetes.io/name":"grafana","app.kubernetes.io/version":"12.0.1","argocd.argoproj.io/instance":"grafana","helm.sh/chart":"grafana-9.2.2"},"name":"grafana","namespace":"grafana"}}
+  creationTimestamp: "2025-05-27T08:10:18Z"
+  labels:
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 12.0.1
+    argocd.argoproj.io/instance: grafana
+    helm.sh/chart: grafana-9.2.2
+  name: grafana
+  namespace: grafana
+  resourceVersion: "339525738"
+  uid: a8881e84-edba-4ae0-b46f-762148fa8725

@@ -1,0 +1,75 @@
+# Example configuration for your .NET microservices
+# Add these environment variables to your UserService and OrderService deployments
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userservice
+  namespace: tracing  # or whatever namespace you're using
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userservice
+  template:
+    metadata:
+      labels:
+        app: userservice
+    spec:
+      containers:
+      - name: userservice
+        image: userservice:latest
+        ports:
+        - containerPort: 8080
+        env:
+        # OpenTelemetry Configuration
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.grafana.svc.cluster.local:4317"
+        - name: OTEL_SERVICE_NAME
+          value: "userservice"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=userservice,service.version=1.0.0"
+        # .NET Auto-instrumentation
+        - name: OTEL_DOTNET_AUTO_TRACES_ENABLED
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_METRICS_ENABLED
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_LOGS_ENABLED
+          value: "true"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderservice
+  namespace: tracing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderservice
+  template:
+    metadata:
+      labels:
+        app: orderservice
+    spec:
+      containers:
+      - name: orderservice
+        image: orderservice:latest
+        ports:
+        - containerPort: 8081
+        env:
+        # OpenTelemetry Configuration
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.grafana.svc.cluster.local:4317"
+        - name: OTEL_SERVICE_NAME
+          value: "orderservice"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=orderservice,service.version=1.0.0"
+        # .NET Auto-instrumentation
+        - name: OTEL_DOTNET_AUTO_TRACES_ENABLED
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_METRICS_ENABLED
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_LOGS_ENABLED
+          value: "true"

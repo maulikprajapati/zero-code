@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securitygateway
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: securitygateway
+  template:
+    metadata:
+      labels:
+        app: securitygateway
+      annotations:
+        logging: promtail
+        logging_jobname: securitygateway
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: securitygateway
+        image: securitygateway:restrict
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: routing-config
+          mountPath: /app/routing.json
+          subPath: routing.json
+      volumes:
+      - name: routing-config
+        configMap:
+          name: routing-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securitygateway
+  namespace: applications
+spec:
+  selector:
+    app: securitygateway
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usermanager
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: usermanager
+  template:
+    metadata:
+      labels:
+        app: usermanager
+      annotations:
+        logging: promtail
+        logging_jobname: usermanager
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: usermanager
+        image: usermanager:restrict
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: usermanager
+  namespace: applications
+spec:
+  selector:
+    app: usermanager
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP

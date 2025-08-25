@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alloy-config
+  namespace: grafana
+data:
+  config.alloy: |
+    otelcol.receiver.otlp "default" {
+      grpc {
+        endpoint = "0.0.0.0:4317"
+      }
+      http {
+        endpoint = "0.0.0.0:4318"
+      }
+      output {
+        traces = [otelcol.processor.filter.health_filter.input]
+      }
+    }
+
+    otelcol.processor.filter "health_filter" {
+      traces {
+        span = [
+          "IsMatch(attributes[\"http.target\"], \".*\\\\/health$\")",
+          "IsMatch(attributes[\"http.route\"], \".*\\\\/health$\")",
+          "IsMatch(attributes[\"url.path\"], \".*\\\\/health$\")",
+          "IsMatch(name, \".*(GET|POST).*\\\\/health.*\")",
+        ]
+      }
+      output {
+        traces = [otelcol.exporter.otlp.tempo.input]
+      }
+    }
+
+    otelcol.exporter.otlp "tempo" {
+      client {
+        endpoint = "http://tempo:4317"
+        tls {
+          insecure = true
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alloy
+  namespace: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alloy
+  template:
+    metadata:
+      labels:
+        app: alloy
+    spec:
+      containers:
+      - name: alloy
+        image: grafana/alloy:latest
+        args:
+          - "run"
+          - "/etc/alloy/config.alloy"
+          - "--server.http.listen-addr=0.0.0.0:12345"
+        ports:
+        - containerPort: 4317
+        - containerPort: 4318
+        - containerPort: 12345
+        volumeMounts:
+        - name: alloy-config
+          mountPath: /etc/alloy
+      volumes:
+      - name: alloy-config
+        configMap:
+          name: alloy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alloy
+  namespace: grafana
+spec:
+  selector:
+    app: alloy
+  ports:
+  - name: otlp-grpc
+    port: 4317
+    targetPort: 4317
+  - name: otlp-http
+    port: 4318
+    targetPort: 4318
