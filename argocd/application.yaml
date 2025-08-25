@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR-USERNAME/zero-code.git  # Replace with your actual repo URL
-    targetRevision: HEAD
+    repoURL: https://github.com/maulikprajapati/zero-code.git
+    targetRevision: main
     path: k8s
   destination:
     server: https://kubernetes.default.svc
@@ -27,8 +27,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR-USERNAME/zero-code.git  # Replace with your actual repo URL
-    targetRevision: HEAD
+    repoURL: https://github.com/maulikprajapati/zero-code.git
+    targetRevision: main
     path: k8s
   destination:
     server: https://kubernetes.default.svc
