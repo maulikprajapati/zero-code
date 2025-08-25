@@ -1,0 +1,184 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderservice
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderservice
+  template:
+    metadata:
+      labels:
+        app: orderservice
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: orderservice
+        image: orderservice:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9901
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9901"
+        - name: OTEL_SERVICE_NAME
+          value: "orderservice"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_DOTNET_AUTO_TRACES_DISABLED_INSTRUMENTATIONS
+          value: "HttpClient"
+        - name: OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES
+          value: "*"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER
+          value: "traceidratio"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER_ARG
+          value: "1.0"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof*"
+        - name: OTEL_DOTNET_AUTO_METRICS_ENABLED
+          value: "true"
+        - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+          value: "http://alloy.monitoring:4318/v1/metrics"
+        - name: ConnectionStrings__DefaultConnection
+          value: "Host=postgres.applications;Database=orderdb;Username=postgres;Password=password"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderservice
+  namespace: applications
+spec:
+  selector:
+    app: orderservice
+  ports:
+  - port: 9901
+    targetPort: 9901
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userservice
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userservice
+  template:
+    metadata:
+      labels:
+        app: userservice
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: userservice
+        image: userservice
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9900
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9900"
+        - name: OTEL_SERVICE_NAME
+          value: "userservice"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_DOTNET_AUTO_TRACES_DISABLED_INSTRUMENTATIONS
+          value: "HttpClient"
+        - name: OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES
+          value: "*"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER
+          value: "traceidratio"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER_ARG
+          value: "1.0"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof*"
+        - name: OTEL_DOTNET_AUTO_METRICS_ENABLED
+          value: "true"
+        - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+          value: "http://alloy.monitoring:4318/v1/metrics"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userservice
+  namespace: applications
+spec:
+  selector:
+    app: userservice
+  ports:
+  - port: 9900
+    targetPort: 9900
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigateway
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apigateway
+  template:
+    metadata:
+      labels:
+        app: apigateway
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: apigateway
+        image: apigateway:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9009
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9009"
+        - name: OTEL_SERVICE_NAME
+          value: "apigateway"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_DOTNET_AUTO_TRACES_DISABLED_INSTRUMENTATIONS
+          value: "HttpClient"
+        - name: OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES
+          value: "*"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER
+          value: "traceidratio"
+        - name: OTEL_DOTNET_AUTO_TRACES_SAMPLER_ARG
+          value: "1.0"
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.name=apigateway,service.version=1.0.0"
+        - name: OTEL_DOTNET_AUTO_TRACES_INSTRUMENTATION_ASPNETCORE_ENABLED
+          value: "true"
+        - name: OTEL_DOTNET_AUTO_METRICS_ENABLED
+          value: "true"
+        - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+          value: "http://alloy.monitoring:4318/v1/metrics"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigateway
+  namespace: applications
+spec:
+  selector:
+    app: apigateway
+  ports:
+  - port: 9009
+    targetPort: 9009
+  type: NodePort
