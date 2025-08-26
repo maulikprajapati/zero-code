@@ -67,6 +67,17 @@ spec:
                   maxLines: 1000
                   minTime: null
                   timeFormat: iso
+              - name: Tempo
+                type: tempo
+                access: proxy
+                url: http://tempo-distributed-gateway.monitoring:3200
+                uid: tempo
+                jsonData:
+                  tracesToLogs:
+                    datasourceUid: loki
+                    tags: ['job']
+                  nodeGraph:
+                    enabled: true
         
   syncPolicy:
     automated:
