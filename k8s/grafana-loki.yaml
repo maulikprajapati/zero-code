@@ -42,6 +42,8 @@ spec:
         querier:
           persistence:
             enabled: false
+        queryScheduler:
+          replicas: 1
         loki:
           config: |
             auth_enabled: false
