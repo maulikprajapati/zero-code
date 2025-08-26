@@ -74,6 +74,7 @@ spec:
                 path: /var/tempo/traces
               wal:
                 path: /var/tempo/wal
+              cache: none
           server:
             http_listen_port: 3200
             grpc_listen_port: 9095
@@ -90,6 +91,14 @@ spec:
           compactor:
             compaction:
               block_retention: 24h
+          query_frontend:
+            search:
+              cache_control:
+                disabled: true
+          querier:
+            search:
+              cache_control:
+                disabled: true
   syncPolicy:
     automated:
       prune: true
