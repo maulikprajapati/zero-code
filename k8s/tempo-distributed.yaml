@@ -10,12 +10,14 @@ spec:
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 2.8.2
+    targetRevision: 1.46.4
     chart: tempo-distributed
     helm:
       releaseName: tempo-distributed
       parameters:
         - name: "memcached.enabled"
+          value: "false"
+        - name: "memcachedExporter.enabled"
           value: "false"
         - name: "minio.enabled"
           value: "false"
@@ -60,8 +62,10 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
-        config:
+        tempo:
           retention: 24h
+          global_overrides:
+            max_traces_per_user: 10000
           storage:
             trace:
               backend: local
