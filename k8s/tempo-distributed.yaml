@@ -57,6 +57,7 @@ spec:
               cpu: 100m
               memory: 128Mi
         gateway:
+          enabled: true
           replicas: 1
           resources:
             requests:
