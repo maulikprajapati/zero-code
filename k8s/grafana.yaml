@@ -70,7 +70,7 @@ spec:
               - name: Tempo
                 type: tempo
                 access: proxy
-                url: http://tempo-distributed-query-frontend.monitoring:3200
+                url: http://tempo-distributed-query-frontend-discovery:3200
                 uid: tempo
                 jsonData:
                   tracesToLogs:
