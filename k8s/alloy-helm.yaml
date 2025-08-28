@@ -67,7 +67,7 @@ spec:
               // Export traces to Tempo
               otelcol.exporter.otlp "tempo" {
                 client {
-                  endpoint = "http://tempo-distributed-distributor.monitoring:9095"
+                  endpoint = "http://tempo-distributed-distributor.monitoring:4317"
                   tls {
                     insecure = true
                   }
