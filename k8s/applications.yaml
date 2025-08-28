@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: orderservice
-        image: orderservice:latest
+        image: localhost:5000/orderservice:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 9901
@@ -80,7 +80,7 @@ spec:
     spec:
       containers:
       - name: userservice
-        image: userservice
+        image: localhost:5000/userservice:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 9900
@@ -141,7 +141,7 @@ spec:
     spec:
       containers:
       - name: apigateway
-        image: apigateway:latest
+        image: localhost:5000/apigateway:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 9009
