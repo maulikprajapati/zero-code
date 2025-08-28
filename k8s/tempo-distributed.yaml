@@ -32,6 +32,9 @@ spec:
         minio:
           enabled: false
         tempo:
+          global_overrides:
+            ingestion_rate_limit_bytes: 20000000
+            ingestion_burst_size_bytes: 30000000
           storage:
             trace:
               backend: local
@@ -41,7 +44,12 @@ spec:
             lifecycler:
               ring:
                 replication_factor: 1
+                kvstore:
+                  store: memberlist
           distributor:
+            ring:
+              kvstore:
+                store: memberlist
             receivers:
               otlp:
                 protocols:
@@ -49,6 +57,13 @@ spec:
                     endpoint: 0.0.0.0:4317
                   http:
                     endpoint: 0.0.0.0:4318
+          querier:
+            frontend_worker:
+              frontend_address: tempo-distributed-query-frontend:9095
+          query_frontend:
+            search:
+              duration_slo: 5s
+              throughput_bytes_slo: 1.073741824e+09
   syncPolicy:
     automated:
       prune: true
