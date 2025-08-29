@@ -41,10 +41,19 @@ spec:
                   endpoint = "0.0.0.0:4318"
                 }
                 output {
-                  traces = [otelcol.processor.filter.health_filter.input]
+                  traces = [otelcol.processor.filter.health_filter.input,
+                  otelcol.connector.servicegraph.default.input,
+                  otelcol.exporter.otlp.default.input]
                   metrics = [otelcol.exporter.prometheus.metrics.input]
                 }
               }
+              otelcol.connector.servicegraph "default" {
+                dimensions = ["http.method", "http.target"]
+                output {
+                  metrics = [otelcol.exporter.otlp.default.input]
+                }
+              }
+
 
               // Export metrics to Prometheus
               otelcol.exporter.prometheus "metrics" {
