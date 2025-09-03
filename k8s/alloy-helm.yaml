@@ -69,6 +69,18 @@ spec:
                   ]
                 }
                 output {
+                  traces = [otelcol.processor.filter.redis_http_only.input]
+                }
+              }
+
+              // Remove Redis spans that are not part of HTTP traces
+              otelcol.processor.filter "redis_http_only" {
+                traces {
+                  span = [
+                    "IsMatch(name, \"^(HSET|EXEC|HMGET|LRANGE|RPOPLPUSH|SET|GET|ZRANGEBYSCORE|ZADD|ZREM|HMSET|HGET|HGETALL|LPUSH|RPUSH|LPOP|RPOP|ZRANGE|ZCARD|EXISTS|DEL|EXPIRE|TTL|INCR|DECR|MGET|MSET|FLUSHDB|FLUSHALL|KEYS|SCAN|ZSCORE|ZCOUNT|HKEYS|HVALS|LLEN|SCARD|SMEMBERS|SADD|SREM|PUBLISH|SUBSCRIBE)$\") and IsRootSpan()",
+                  ]
+                }
+                output {
                   traces = [otelcol.exporter.otlp.tempo.input]
                 }
               }
