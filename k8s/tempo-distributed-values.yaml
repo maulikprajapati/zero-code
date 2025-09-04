@@ -1,0 +1,103 @@
+# ======================================================
+# Tempo Distributed - Minikube Optimized Values
+# ======================================================
+
+useLocal: true   # Use local storage instead of S3/MinIO
+
+tempo:
+  multitenancyEnabled: false
+
+traces:
+  otlp:
+    http:
+      enabled: true
+      port: 4318
+      receiverConfig:
+        endpoint: 0.0.0.0:4318
+    grpc:
+      enabled: true
+      port: 4317
+      receiverConfig:
+        endpoint: 0.0.0.0:4317
+# ----------------------------
+# Disable anti-affinity for all components
+# ----------------------------
+distributor:
+  replicas: 1
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+ingester:
+  replicas: 2
+  persistence:
+    enabled: false
+    inMemory: true
+    accessModes: ["ReadWriteOnce"]
+    size: 2Gi
+    storageClass: standard   # Change if your Minikube SC is different
+  extraVolumes:
+    - name: traces-storage
+      persistentVolumeClaim:
+        claimName: tempo-traces-pvc
+  extraVolumeMounts:
+    - name: traces-storage
+      mountPath: /var/tempo/traces
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+compactor:
+  replicas: 2
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+querier:
+  replicas: 2
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+queryFrontend:
+  replicas: 2
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+metricsGenerator:
+  enabled: true
+  replicas: 2
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# ----------------------------
+# MinIO disabled (local storage)
+# ----------------------------
+minio:
+  enabled: false

@@ -15,7 +15,7 @@ spec:
     helm:
       releaseName: tempo-distributed
       valueFiles:
-        - ../tempo-distributed.values.yaml
+        - tempo-distributed-values.yaml
   syncPolicy:
     automated:
       prune: true
