@@ -47,4 +47,4 @@ ENV DOTNET_SHARED_STORE=/opt/otel/store
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup --uid 1000 appuser
 USER appuser
 
-ENTRYPOINT ["/opt/otel/instrument.sh", "dotnet", "ApiGateway.dll"]
+ENTRYPOINT ["dotnet", "ApiGateway.dll"]

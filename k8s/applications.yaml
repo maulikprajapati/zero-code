@@ -46,6 +46,10 @@ spec:
           value: "http://alloy.monitoring:4318/v1/metrics"
         - name: ConnectionStrings__DefaultConnection
           value: "Host=postgres.applications;Database=orderdb;Username=postgres;Password=password"
+        - name: CORECLR_PROFILER
+          value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+        - name: CORECLR_PROFILER_PATH
+          value: "/opt/otel/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
 ---
 apiVersion: v1
 kind: Service
@@ -105,6 +109,10 @@ spec:
           value: "true"
         - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
           value: "http://alloy.monitoring:4318/v1/metrics"
+        - name: CORECLR_PROFILER
+          value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+        - name: CORECLR_PROFILER_PATH
+          value: "/opt/otel/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
 ---
 apiVersion: v1
 kind: Service
@@ -168,6 +176,10 @@ spec:
           value: "true"
         - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
           value: "http://alloy.monitoring:4318/v1/metrics"
+        - name: CORECLR_PROFILER
+          value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+        - name: CORECLR_PROFILER_PATH
+          value: "/opt/otel/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
 
 ---
 apiVersion: v1

@@ -19,8 +19,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y curl unzip
 RUN curl -sSfL https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/latest/download/otel-dotnet-auto-install.sh -O
 RUN chmod +x otel-dotnet-auto-install.sh
+ENV OTEL_DOTNET_AUTO_HOME=/opt/otel
 RUN ./otel-dotnet-auto-install.sh
-RUN chmod +x /root/.otel-dotnet-auto/instrument.sh
+RUN chmod -R 755 /opt/otel
 
 COPY --from=publish /app/publish .
 
@@ -40,4 +41,8 @@ ENV DOTNET_STARTUP_HOOKS=/root/.otel-dotnet-auto/net/OpenTelemetry.AutoInstrumen
 ENV DOTNET_ADDITIONAL_DEPS=/root/.otel-dotnet-auto/AdditionalDeps
 ENV DOTNET_SHARED_STORE=/root/.otel-dotnet-auto/store
 
-ENTRYPOINT ["/root/.otel-dotnet-auto/instrument.sh", "dotnet", "OrderService.dll"]
+
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup --uid 1000 appuser
+USER appuser
+
+ENTRYPOINT ["dotnet", "OrderService.dll"]
