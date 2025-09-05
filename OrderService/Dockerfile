@@ -36,13 +36,13 @@ ENV Logging__Console__FormatterName=json
 ENV CORECLR_ENABLE_PROFILING=1
 ENV OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS=/debug/pprof.*
 ENV CORECLR_PROFILER={918728DD-259F-4A6A-AC2B-B85E1B658318}
-ENV CORECLR_PROFILER_PATH=/root/.otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so
-ENV DOTNET_STARTUP_HOOKS=/root/.otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll
-ENV DOTNET_ADDITIONAL_DEPS=/root/.otel-dotnet-auto/AdditionalDeps
-ENV DOTNET_SHARED_STORE=/root/.otel-dotnet-auto/store
+ENV CORECLR_PROFILER_PATH=/opt/otel/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so
+ENV DOTNET_STARTUP_HOOKS=/opt/otel/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll
+ENV DOTNET_ADDITIONAL_DEPS=/opt/otel/AdditionalDeps
+ENV DOTNET_SHARED_STORE=/opt/otel/store
 
 
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup --uid 1000 appuser
 USER appuser
 
-ENTRYPOINT ["dotnet", "OrderService.dll"]
+ENTRYPOINT ["/opt/otel/instrument.sh", "dotnet", "OrderService.dll"]

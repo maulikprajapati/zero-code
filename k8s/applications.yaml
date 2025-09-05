@@ -49,7 +49,7 @@ spec:
         - name: CORECLR_PROFILER
           value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
         - name: CORECLR_PROFILER_PATH
-          value: "/opt/otel/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
+          value: "/opt/otel/linux-arm64/OpenTelemetry.AutoInstrumentation.Native.so"
 ---
 apiVersion: v1
 kind: Service
@@ -112,7 +112,7 @@ spec:
         - name: CORECLR_PROFILER
           value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
         - name: CORECLR_PROFILER_PATH
-          value: "/opt/otel/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
+          value: "/opt/otel/linux-arm64/OpenTelemetry.AutoInstrumentation.Native.so"
 ---
 apiVersion: v1
 kind: Service
@@ -179,7 +179,7 @@ spec:
         - name: CORECLR_PROFILER
           value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
         - name: CORECLR_PROFILER_PATH
-          value: "/opt/otel/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so"
+          value: "/opt/otel/linux-arm64/OpenTelemetry.AutoInstrumentation.Native.so"
 
 ---
 apiVersion: v1
