@@ -74,7 +74,7 @@ spec:
                 uid: tempo
                 jsonData:
                   tracesToLogs:
-                    datasourceUid: loki
+                    datasourceUid: P8E80F9AEF21F6940
                     tags: ['job']
                     mappedTags:
                       - key: service.name
