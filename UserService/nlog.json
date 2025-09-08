@@ -4,7 +4,7 @@
     "targets": {
       "logconsole": {
         "type": "ColoredConsole",
-        "layout": "{\"timestamp\":\"${longdate}\",\"level\":\"${level:uppercase=true}\",\"logger\":\"${logger}\",\"traceId\":\"${activity:property=TraceId}\",\"spanId\":\"${activity:property=SpanId}\",\"message\":\"${message}\",\"exception\":\"${exception:format=tostring}\"}",
+        "layout": "{\"timestamp\":\"${longdate}\",\"level\":\"${level:uppercase=true}\",\"logger\":\"${logger}\",\"traceId\":\"${aspnet-traceidentifier}\",\"spanId\":\"${mdlc:item=SpanId}\",\"message\":\"${message}\",\"exception\":\"${exception:format=tostring}\"}",
         "rowHighlightingRules": [
           {
             "condition": "level == LogLevel.Info",

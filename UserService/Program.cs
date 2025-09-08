@@ -6,6 +6,8 @@ using System.Text;
 using NLog.Web;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Diagnostics;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,16 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 var logger = NLog.LogManager.GetCurrentClassLogger();
+
+app.Use(async (context, next) =>
+{
+    var activity = Activity.Current;
+    if (activity != null)
+    {
+        MappedDiagnosticsLogicalContext.Set("SpanId", activity.SpanId.ToString());
+    }
+    await next();
+});
 
 app.MapControllers();
 
