@@ -76,6 +76,14 @@ spec:
                   tracesToLogs:
                     datasourceUid: loki
                     tags: ['job']
+                    mappedTags:
+                      - key: service.name
+                        value: job
+                    mapTagNamesEnabled: true
+                    spanStartTimeShift: '-1h'
+                    spanEndTimeShift: '1h'
+                    filterByTraceID: true
+                    filterBySpanID: true
                   nodeGraph:
                     enabled: true
         
