@@ -1,0 +1,211 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securitygateway
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: securitygateway
+  template:
+    metadata:
+      labels:
+        app: securitygateway
+      annotations:
+        logging_jobname: securitygateway
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: securitygateway
+        image: securitygateway:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9900
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9900"
+        - name: OTEL_SERVICE_NAME
+          value: "securitygateway"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "http/protobuf"
+        - name: OTEL_DOTNET_AUTO_TRACES_ENABLED
+          value: "true"
+        - name: Logging__Console__FormatterName
+          value: "json"
+        - name: CORECLR_ENABLE_PROFILING
+          value: "1"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof.*"
+        - name: CORECLR_PROFILER
+          value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+        - name: CORECLR_PROFILER_PATH
+          value: "/opt/otel/linux-arm64/OpenTelemetry.AutoInstrumentation.Native.so"
+        - name: DOTNET_STARTUP_HOOKS
+          value: "/opt/otel/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+        - name: DOTNET_ADDITIONAL_DEPS
+          value: "/opt/otel/AdditionalDeps"
+        - name: DOTNET_SHARED_STORE
+          value: "/opt/otel/store"
+        volumeMounts:
+        - name: routing-config
+          mountPath: /app/routing.json
+          subPath: routing.json
+      volumes:
+      - name: routing-config
+        configMap:
+          name: routing-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securitygateway
+  namespace: applications
+spec:
+  selector:
+    app: securitygateway
+  ports:
+  - port: 9900
+    targetPort: 9900
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usermanager
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: usermanager
+  template:
+    metadata:
+      labels:
+        app: usermanager
+      annotations:
+        logging: promtail
+        logging_jobname: usermanager
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: usermanager
+        image: usermanager
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9901
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9901"
+        - name: OTEL_SERVICE_NAME
+          value: "usermanager"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "http/protobuf"
+        - name: OTEL_DOTNET_AUTO_TRACES_ENABLED
+          value: "true"
+        - name: Logging__Console__FormatterName
+          value: "json"
+        - name: CORECLR_ENABLE_PROFILING
+          value: "1"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof.*"
+        - name: CORECLR_PROFILER
+          value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+        - name: CORECLR_PROFILER_PATH
+          value: "/opt/otel/linux-arm64/OpenTelemetry.AutoInstrumentation.Native.so"
+        - name: DOTNET_STARTUP_HOOKS
+          value: "/opt/otel/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+        - name: DOTNET_ADDITIONAL_DEPS
+          value: "/opt/otel/AdditionalDeps"
+        - name: DOTNET_SHARED_STORE
+          value: "/opt/otel/store"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: usermanager
+  namespace: applications
+spec:
+  selector:
+    app: usermanager
+  ports:
+  - port: 9901
+    targetPort: 9901
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devicemanager
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devicemanager
+  template:
+    metadata:
+      labels:
+        app: devicemanager
+      annotations:
+        logging: promtail
+        logging_jobname: devicemanager
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: devicemanager
+        image: devicemanager:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9902
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:9902"
+        - name: OTEL_SERVICE_NAME
+          value: "devicemanager"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://alloy.monitoring:4318"
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "http/protobuf"
+        - name: OTEL_DOTNET_AUTO_TRACES_ENABLED
+          value: "true"
+        - name: Logging__Console__FormatterName
+          value: "json"
+        - name: CORECLR_ENABLE_PROFILING
+          value: "1"
+        - name: OTEL_DOTNET_AUTO_HTTP_SERVER_EXCLUDED_URLS
+          value: "/debug/pprof.*"
+        - name: CORECLR_PROFILER
+          value: "{918728DD-259F-4A6A-AC2B-B85E1B658318}"
+        - name: CORECLR_PROFILER_PATH
+          value: "/opt/otel/linux-arm64/OpenTelemetry.AutoInstrumentation.Native.so"
+        - name: DOTNET_STARTUP_HOOKS
+          value: "/opt/otel/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+        - name: DOTNET_ADDITIONAL_DEPS
+          value: "/opt/otel/AdditionalDeps"
+        - name: DOTNET_SHARED_STORE
+          value: "/opt/otel/store"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devicemanager
+  namespace: applications
+spec:
+  selector:
+    app: devicemanager
+  ports:
+  - port: 9902
+    targetPort: 9902
+  type: NodePort
