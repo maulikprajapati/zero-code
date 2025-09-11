@@ -9,19 +9,8 @@ data:
         level  = "info"
         format = "logfmt"
       }
-      extraPorts:
-        - name: otlp-grpc
-          port: 4317
-          targetPort: 4317
-          protocol: TCP
-        - name: otlp-http
-          port: 4318
-          targetPort: 4318
-          protocol: TCP
-      configMap:
-        create: true
-        content: |
-          // OTLP receiver for traces and metrics
+
+      // OTLP receiver for traces and metrics
           otelcol.receiver.otlp "default" {
             grpc {
               endpoint = "0.0.0.0:4317"
@@ -43,7 +32,7 @@ data:
           // Prometheus remote write for metrics
           prometheus.remote_write "metrics" {
             endpoint {
-              url = "http://prometheus.monitoring:9090/api/v1/write"
+              url = "http://prometheus.monitoring.svc.cluster.local:9090/api/v1/write"
             }
           }
 
