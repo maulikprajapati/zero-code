@@ -39,8 +39,7 @@ spec:
         compactor:
           kind: Deployment
           persistence:
-            enabled: true
-            size: 10Gi
+            enabled: false
           extraArgs:
             - -config.expand-env=true
         ingester:
