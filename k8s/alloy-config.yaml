@@ -25,7 +25,7 @@ data:
             }
             output {
               metrics = [otelcol.processor.batch.faro.input]
-              logs    = [otelcol.processor.batch.faro.input] 
+              logs    = [otelcol.exporter.loki.faro.input] 
               traces  = [otelcol.processor.batch.faro.input]
             }
           }
@@ -36,29 +36,7 @@ data:
             send_batch_size = 100
             
             output {
-              metrics = [otelcol.processor.resource.faro.input]
-              logs    = [otelcol.processor.resource.faro.input]
-              traces  = [otelcol.processor.resource.faro.input]
-            }
-          }
-
-          // Resource processor to add Faro-specific attributes
-          otelcol.processor.resource "faro" {
-            action {
-              key = "service.name"
-              action = "upsert"
-              from_attribute = "faro.app.name"
-            }
-            
-            action {
-              key = "service.version"
-              action = "upsert" 
-              from_attribute = "faro.app.version"
-            }
-            
-            output {
               metrics = [otelcol.exporter.prometheus.metrics.input]
-              logs    = [otelcol.exporter.loki.faro.input]
               traces  = [otelcol.processor.filter.health_filter.input]
             }
           }
