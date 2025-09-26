@@ -17,49 +17,10 @@ data:
             }
             http {
               endpoint = "0.0.0.0:4318"
-              cors {
-                allowed_origins = ["*"]
-                allowed_headers = ["*"]
-                max_age = 7200
-              }
             }
             output {
-              metrics = [otelcol.processor.batch.faro.input]
-              logs    = [otelcol.processor.batch.faro.input] 
-              traces  = [otelcol.processor.batch.faro.input]
-            }
-          }
-
-          // Batch processor
-          otelcol.processor.batch "faro" {
-            timeout = "1s"
-            send_batch_size = 100
-            
-            output {
-              metrics = [otelcol.processor.resource.faro.input]
-              logs    = [otelcol.processor.resource.faro.input]
-              traces  = [otelcol.processor.resource.faro.input]
-            }
-          }
-
-          // Resource processor to add Faro-specific attributes
-          otelcol.processor.resource "faro" {
-            action {
-              key = "service.name"
-              action = "upsert"
-              from_attribute = "faro.app.name"
-            }
-            
-            action {
-              key = "service.version"
-              action = "upsert" 
-              from_attribute = "faro.app.version"
-            }
-            
-            output {
+              traces = [otelcol.processor.filter.health_filter.input]
               metrics = [otelcol.exporter.prometheus.metrics.input]
-              logs    = [otelcol.exporter.loki.faro.input]
-              traces  = [otelcol.processor.filter.health_filter.input]
             }
           }
 
@@ -134,11 +95,6 @@ data:
 
           discovery.kubernetes "ingresses" {
           role = "ingress"
-          }
-
-          // Loki exporter
-          otelcol.exporter.loki "faro" {
-            forward_to = [loki.write.loki.receiver]
           }
 
           // Send logs to Loki
