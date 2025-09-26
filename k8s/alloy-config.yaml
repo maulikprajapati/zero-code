@@ -20,7 +20,6 @@ data:
         output {
           logs = [loki.write.loki.receiver]
           traces = [otelcol.processor.batch.faro.input]
-          metrics = [otelcol.exporter.prometheus.metrics.input]
         }
       }
 
