@@ -18,9 +18,22 @@ data:
           cors_allowed_origins = ["*"]
         }
         output {
-          logs = [loki.write.loki.receiver]
+          logs = [loki.process.faro_logs.receiver]
           traces = [otelcol.processor.batch.faro.input]
         }
+      }
+
+      // Process Faro logs with proper labels
+      loki.process "faro_logs" {
+        stage.static_labels {
+          values = {
+            cluster = "dev",
+            source = "faro",
+            app = "frontend-app",
+            component = "browser",
+          }
+        }
+        forward_to = [loki.write.loki.receiver]
       }
 
       // OTLP receiver for traces and metrics
@@ -135,7 +148,7 @@ data:
           // Send logs to Loki
           loki.write "loki" {
             endpoint {
-              url = "http://loki-distributed-gateway.monitoring:80/loki/api/v1/push"
+              url = "http://loki-distributed-gateway.monitoring.svc.cluster.local:80/loki/api/v1/push"
             }
           }
 
