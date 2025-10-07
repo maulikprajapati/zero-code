@@ -31,6 +31,9 @@ data:
             source = "faro",
             app = "frontend-app",
             component = "browser",
+            kind = "measurement",
+            Environment = "dev",
+            Application = "frontend-app",
           }
         }
         forward_to = [loki.write.loki.receiver]

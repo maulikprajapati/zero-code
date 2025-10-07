@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend Observability Demo</title>
+    <script src="https://unpkg.com/@grafana/faro-web-sdk@^1.3.0/dist/bundle/faro-web-sdk.iife.js"></script>
+</head>
+<body>
+    <h1>Frontend App</h1>
+    <button onclick="fetchUsers()">Fetch Users</button>
+    <button onclick="simulateError()">Simulate Error</button>
+    <div id="result"></div>
+
+    <script>
+        // Get Alloy endpoint from minikube
+        const ALLOY_ENDPOINT = 'http://localhost:12347/collect';
+        
+        // Initialize Faro SDK globally
+        let faro;
+        setTimeout(() => {
+            faro = window.GrafanaFaroWebSdk.initializeFaro({
+                url: ALLOY_ENDPOINT,
+                app: {
+                    name: 'frontend-app',
+                    version: '1.0.0',
+                    environment: 'dev'
+                }
+            });
+        }, 1000);
+
+        async function fetchUsers() {
+            try {
+                if (faro) faro.api.pushLog(['Fetching users from backend']);
+                const response = await fetch('http://localhost:9009/api/users/123');
+                const data = await response.text();
+                document.getElementById('result').innerHTML = data;
+                if (faro) faro.api.pushLog(['Successfully fetched user data']);
+            } catch (error) {
+                if (faro) faro.api.pushError(error);
+                document.getElementById('result').innerHTML = 'Error: ' + error.message;
+            }
+        }
+
+        function simulateError() {
+            if (faro) {
+                faro.api.pushLog(['Simulating error']);
+                faro.api.pushError(new Error('This is a test error from frontend'));
+            }
+            throw new Error('This is a test error from frontend');
+        }
+    </script>
+</body>
+</html>
