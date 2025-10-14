@@ -15,6 +15,11 @@ spec:
     chart: grafana
     helm:
       releaseName: grafana
+      parameters:
+        - name: admin.existingSecret
+          value: grafana
+        - name: admin.passwordKey
+          value: admin-password
       dashboardsConfigMaps:
         default: "grafana-dashboards"
       values: |
